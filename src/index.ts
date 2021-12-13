@@ -5,7 +5,6 @@ import {config} from '../config'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { ActiveTickets, PrivateThread, PrivateThreadSettings, PublicThread, TicketType } from '../typings';
 import ButtonCommand from './classes/ButtonCommand';
-import DeepSea from './deepsea'
 
 const client = new Client({intents:["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"]});
 client.commands = new Collection();
@@ -143,21 +142,7 @@ client.getSupportThreadData = (userId:string) => {
 	return activeTickets[userId];
 }
 
-//Message Commands
-import {botCommands} from './msg_commands/bot'
-import {moderationCommands} from './msg_commands/moderation'
-import {userCommands} from './msg_commands/user'
-import {supportCommands} from './msg_commands/support'
-import {memeCommands} from './msg_commands/meme'
-import {customCommands} from './msg_commands/custom'
 import ContextMenuCommand from './classes/ContextMenuCommand';
-
-botCommands.forEach(c => client.messageCommands.set(c.name, c))
-moderationCommands.forEach(c => client.messageCommands.set(c.name, c))
-userCommands.forEach(c => client.messageCommands.set(c.name, c))
-supportCommands.forEach(c => client.messageCommands.set(c.name, c))
-memeCommands.forEach(c => client.messageCommands.set(c.name, c))
-customCommands.forEach(c => client.messageCommands.set(c.name, c))
 
 async function loadButtonCommands(){
 	let buttonCommandFiles = readdirSync(`./src/buttons`)
@@ -486,24 +471,22 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 		(newMessage.guild.channels.cache.get(config.modLog) as TextChannel).send(`:pencil: **Message Edit**:\nfrom ${newMessage.author.tag} (${newMessage.author.id}) | in <#${newMessage.channel.id}>:\n\`${oldMessage.content}\`\n → \n\`${newMessage.content}\``)
 })
 
-// Update the cached DeepSea release data
-async function setupDeepsea() {
-	var deepsea = new DeepSea()
-	var res = await deepsea.update()
-	console.log(`Cached DeepSea has been updated`)
-}
-
-// Update cached data every 60 minutes (1 Hour)
-setInterval(() => {
-	setupDeepsea()
-}, 60 * 60 * 1000)
-
 async function startBot(){
 	await loadButtonCommands();
 	await loadSlashCommands();
 	await loadCtxCommands();
-	await setupDeepsea();
 	await client.login(config.token);
+	// client.guilds.cache.get("756363194238369813").commands.set([
+	// 	{
+	// 		"type":"MESSAGE",
+	// 		"name":"Quote Message"
+	// 	},
+	// 	{
+	// 		"type":"CHAT_INPUT",
+	// 		"name":"setup_ticket_button",
+	// 		"description":"setup tickets"
+	// 	}
+	// ])
 	console.log(`Statup functions have been executed!`)
 }
 

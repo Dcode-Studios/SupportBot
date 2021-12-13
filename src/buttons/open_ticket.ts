@@ -48,14 +48,12 @@ export default new ButtonCommand({
       })
       .then(channel => {                
         const questions = [
-          `- Firmware and CFW / Atmosphere / DeepSea version`,
-          `- Do you use hekate or fusee-primary?`,
-          `- If you have an error screen with ID or code, what does it say? A screenshot/picture could be helpful.`,
-          `- What, if anything, have you tried to fix the issue?`,
-          `- Are you coming for support with SDSetup or DeepSea?`
+          `- Your server ID (<https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID->)`,
+          `- What your issue is`,
+          `- What steps you take to reproduce the issue`
         ];
         (interaction.client.channels.cache.get(channel.id) as ThreadChannel).send({
-          "content":`${supportRoleOnly?"\n:lock: *This is a private ticket, so only staff may reply.*":"\n:unlock: *This is a public ticket, everyone may view and reply to it..*"}\n\nHey <@${threadStarter}>, to make it easier for us and others help you with your issue, please tell us a few things about your setup, like:\n\n${questions.join("\n")}`,
+          "content":`${supportRoleOnly?"\n:lock: *This is a private ticket, so only staff may reply.*":"\n:unlock: *This is a public ticket, everyone may view and reply to it..*"}\n\nHey <@${threadStarter}>, to make it easier for us and others help you with your issue, please try to tell us a few of the following things:\n\n${questions.join("\n")}`,
           "components":[
             {
               "type":1,
@@ -88,7 +86,7 @@ export default new ButtonCommand({
               userId:threadStarter
             });
             (interaction.client.channels.cache.get(channel.id) as ThreadChannel).send({
-              "content":`Thanks! <@&${config.supportRoleId}> will be here to support you shortly.\n\n*(Disclaimer: You may not receive an answer instantly. Many of us have lives outside of Discord and will respond whenever we're able to, whenever that is.)*`
+              "content":`Thanks! <@&${config.supportRoleId}> will be here to support you shortly.`
             })
           })
           interaction.followUp({
