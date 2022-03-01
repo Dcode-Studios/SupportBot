@@ -22,7 +22,7 @@ export default new ModalCommand({
         })
         .then(channel => {                
             const promptedQuestions = [
-            `Short description for this ticket`,
+            `Topic`,
             `Server ID`,
             `Describe in detail what you need help with`
             ];
