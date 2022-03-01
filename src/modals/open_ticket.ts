@@ -22,11 +22,9 @@ export default new ModalCommand({
         })
         .then(channel => {                
             const promptedQuestions = [
-            `Firmware + Atmosphere / DeepSea version`,
-            `Do you use Hekate or Fusee-Primary?`,
-            `Do you have an error code/screen?`,
-            `Coming for support with SDSetup or DeepSea?`,
-            `Describe your issue and what led up to it`
+            `Short description for this ticket`,
+            `Server ID`,
+            `Describe in detail what you need help with`
             ];
             let questionResponses:PromptedQuestion[] = promptedQuestions.map((question, index) => {
                 return {
