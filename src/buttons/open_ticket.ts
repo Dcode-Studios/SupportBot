@@ -62,7 +62,23 @@ export default new ButtonCommand({
                   required:false
                 }
               ]
-            },
+            }
+          ]
+        })
+      interaction.client.createSupportThread({
+        shortDesc:topic.value.toString(), 
+        userId:threadStarter, 
+        privateTicket: supportRoleOnly
+      })
+      .then(channel => {                
+        const questions = [
+          `- Your server ID (<https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID->)`,
+          `- What your issue is`,
+          `- What steps you take to reproduce the issue`
+        ];
+        (interaction.client.channels.cache.get(channel.id) as ThreadChannel).send({
+          "content":`${supportRoleOnly?"\n:lock: *This is a private ticket, so only staff may reply.*":"\n:unlock: *This is a public ticket, everyone may view and reply to it..*"}\n\nHey <@${threadStarter}>, to make it easier for us and others help you with your issue, please try to tell us a few of the following things:\n\n${questions.join("\n")}`,
+          "components":[
             {
               type: 1,
               components:[
@@ -89,13 +105,27 @@ export default new ButtonCommand({
                 }
               ]
             }
-          ],
-          title: 'Open Support Ticket',
-          custom_id: 'open_ticket_modal'
-        }
-      }
-    }).then((err) => {
-      console.log(err)
-    });
+          ]
+        }).then(r => {
+          r.channel.awaitMessages({
+            max:1,
+            filter(message){
+              return message.author.id == threadStarter;
+            }
+          }).then(async () => {
+            await interaction.client.updateSupportThread({
+              threadId:channel.id,
+              userId:threadStarter
+            });
+            (interaction.client.channels.cache.get(channel.id) as ThreadChannel).send({
+              "content":`Thanks! <@&${config.supportRoleId}> will be here to support you shortly.`
+            })
+          })
+          interaction.followUp({
+            content:`Ticket is ready in <#${channel.id}>`,
+            ephemeral:true
+          })
+        })
+    })
   }
 })
