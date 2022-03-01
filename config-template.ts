@@ -10,5 +10,7 @@ export const config:Config = {
 	"staffRoles":["", ""],
 	"warnBehavior":[],
 	"supportChannelId":"",
-	"supportRoleId":""
+	"supportRoleId":"",
+	noteJsonLocation:"",
+	warningJsonLocation:""
 }
