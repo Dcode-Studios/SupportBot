@@ -24,7 +24,7 @@ export default [{
     components: [{
         type: 4,
         custom_id: 'question3',
-        style: 1,
+        style: 2,
         label: 'Describe in detail what you need help with',
         placeholder: 'Example: Well, I need to add xxxxxx to sync with xxxxxx',
         required: true
